@@ -40,6 +40,10 @@ class Cli
               alias: 'm'
               default: false
               describe: 'Dump metadata to a file or api.json if no filename given'
+    @args = @args.options 'title',
+              alias: 't'
+              default: path.basename process.cwd()
+              describe: 'Title for index page'
     @args = @args.help('help').alias('help', '?')
     @args = @args.argv
 
@@ -143,7 +147,7 @@ class Cli
   render: (content, filePath) ->
     doc = Template.render 'layout',
                           content: content
-                          title: 'Endokken'
+                          title: @args.title
                           navigation: @navigation
                           version: @version
     fs.writeFileSync(filePath, doc)
