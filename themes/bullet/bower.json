@@ -1,0 +1,6 @@
+{
+  "name": "endokken-bullet",
+  "dependencies": {
+    "primer-css": "2.0.3"
+  }
+}
