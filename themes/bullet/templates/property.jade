@@ -1,0 +1,11 @@
+.panel.panel-primary.property(id= id)
+  .panel-heading
+    .panel-title
+      span.signature!= signature
+      a(href= "##{id}")
+        span.octicon.octicon-link
+      a(href= srcUrl)
+        span.octicon.octicon-file-code
+  .panel-body
+    != description
+    != examples

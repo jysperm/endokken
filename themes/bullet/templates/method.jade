@@ -1,0 +1,13 @@
+.panel.panel-primary.method-block(id= id)
+  .panel-heading
+    .panel-title
+      span.signature!= signature
+      a(href="##{id}", data-toggle='tooltip', title='Permalink')
+        span.octicon.octicon-link
+      a(href=srcUrl, data-toggle='tooltip', title='Source Code')
+        span.octicon.octicon-file-code
+  .panel-body
+    != description
+    != examples
+    != parameterBlock
+    != returnValueBlock

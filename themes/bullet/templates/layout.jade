@@ -1,7 +1,38 @@
 doctype html
-html
+html(lang='en')
   head
     meta(charset='utf-8')
+    meta('http-equiv'='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     title= title
-      
+    link(rel='stylesheet', href='vendor.css', type='text/css')
+    link(rel='stylesheet', href='app.css', type='text/css')
   body
+    .top-bar
+      .wrapper
+        span.title= title
+    .container
+      .header
+        .select-menu
+          span.button.select-menu-button.js-menu-target
+            i Version:
+            span.js-select-button latest
+          //- .select-menu-modal
+
+        .documents-search
+          input(name='q' type="text" placeholder="Search API docs")
+      .row
+        .column.navigation
+          .side-nav
+            !=navigation
+        .column.main-column
+          .content.markdown-body
+            !=content
+  footer
+    .footer.text-center
+      .wrapper
+        | Generated on #{(new Date).toString()} by 
+        a(href='https://github.com/lee-dohm/endokken') Endokken v#{version}
+
+    script(src='app.js')
+    script(src='vendor.js')
