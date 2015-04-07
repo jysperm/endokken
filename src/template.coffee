@@ -86,7 +86,7 @@ class Template
     else if fs.existsSync template + '.haml'
       @renderer = hamlRenderer source '.haml'
     else if fs.existsSync template + '.jade'
-      @renderer = hamlRenderer source '.jade'
+      @renderer = jadeRenderer source '.jade'
     else
       throw new Error 'Template not found'
 
