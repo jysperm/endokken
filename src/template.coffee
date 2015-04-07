@@ -2,9 +2,10 @@ fs = require 'fs'
 path = require 'path'
 
 hamlc = require 'haml-coffee'
+jade = require 'jade'
 highlightjs = require 'highlight.js'
 marked = require 'marked'
-up = require 'underscore-plus'
+_ = require 'underscore-plus'
 
 Resolver = require './resolver'
 
@@ -39,6 +40,16 @@ class Template
 
   @theme: 'default'
 
+  # Public: Got a sub-class of Template use specified `theme`.
+  #
+  # * `theme` {String}
+  #
+  # Returns a {Template}
+  @fromTheme: (theme) ->
+    class Theme extends Template
+    Theme.theme = theme
+    return Theme
+
   # Public: Renders the `template` using `locals`.
   #
   # * `template` {String} name of the template to use.
@@ -49,40 +60,55 @@ class Template
   #     * `noParagraph` Strips the paragraph tags from fields converted from Markdown
   #     * `resolve` Resolves references in the listed fields in `locals`
   #
-  # Returns a {String} containing the rendered tepmlate.
+  # Returns a {String} containing the rendered template.
   @render: (template, locals, options) ->
-    new this(template).render(locals, options)
+    (new this template, options?.compiler).render locals, options
 
   # Public: Creates a new `Template` object.
   #
   # * `template` Name {String} of the template to use to render the object.
-  constructor: (template) ->
-    @templatePath = @normalizeTemplatePath(template)
+  constructor: (template, options = {}) ->
+    if template and template[0] != '/'
+      template = path.resolve __dirname, '../themes', @constructor.theme, 'templates', template
+
+    source = (extname) ->
+      return fs.readFileSync(template + extname).toString()
+
+    hamlRenderer = (source) ->
+      return hamlc.compile source, options ? {escapeAttributes: false}
+
+    jadeRenderer = (source) ->
+      return jade.compile source, _.extend options,
+        filename: template
+
+    if fs.existsSync template
+      @renderer = hamlRenderer source ''
+    else if fs.existsSync template + '.haml'
+      @renderer = hamlRenderer source '.haml'
+    else if fs.existsSync template + '.jade'
+      @renderer = hamlRenderer source '.jade'
+    else
+      throw new Error 'Template not found'
 
   # Public: Renders the page.
   #
   # * `locals` {Object} of items to insert into the template
   # * `options` {Object}
-  #     * `compiler` {Object} of `hamlc` compiler options
   #     * `markdown` Converts the listed fields from Markdown to HTML
   #     * `noParagraph` Strips the paragraph tags from fields converted from Markdown
   #     * `resolve` Resolves references in the listed fields in `locals`
   #
   # Returns a {String} containing the rendered HTML.
-  render: (locals, options = {}) ->
-    if options.resolve
-      for field in options.resolve
+  render: (locals, {resolve, markdown, noParagraph} = {}) ->
+    if resolve
+      for field in resolve
         locals[field] = @resolveReferences(locals[field])
 
-    if options.markdown
-      for field in options.markdown
-        locals[field] = @markdownify(locals[field], noParagraph: options.noParagraph)
+    if markdown
+      for field in markdown
+        locals[field] = @markdownify(locals[field], noParagraph: noParagraph)
 
-    haml = fs.readFileSync(@templatePath).toString()
-    template = hamlc.compile(haml, options.compiler ? {escapeAttributes: false})
-    content = template(locals)
-
-    content.replace(/\n\n/, '\n')
+    return @renderer(locals).replace(/\n\n/, '\n')
 
   # Public: Converts the supplied Markdown content into HTML.
   #

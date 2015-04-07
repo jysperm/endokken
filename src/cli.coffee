@@ -4,8 +4,6 @@ path = require 'path'
 donna = require 'donna'
 tello = require 'tello'
 
-ClassPage = require './class-page'
-FilePage = require './file-page'
 Resolver = require './resolver'
 Template = require './template'
 
@@ -25,6 +23,10 @@ class Cli
     @version = packageInfo.version
     @parseArguments()
 
+    @Template = Template.fromTheme @args.theme
+    @ClassPage = require('./class-page') @Template
+    @FilePage = require('./file-page') @Template
+
   # Public: Executes the program.
   run: ->
     @generateMetadata()
@@ -41,9 +43,10 @@ class Cli
               default: false
               describe: 'Dump metadata to a file or api.json if no filename given'
     @args = @args.options 'title',
-              alias: 't'
               default: path.basename process.cwd()
               describe: 'Title for index page'
+    @args = @args.options 'theme',
+              default: 'default'
     @args = @args.help('help').alias('help', '?')
     @args = @args.argv
 
@@ -131,13 +134,13 @@ class Cli
 
   getNavClasses: (metadata) ->
     navItems = (name for name, _ of metadata.classes)
-    items = (Template.render('nav-item', name: item, url: item) for item in navItems).join('\n')
-    Template.render('navigation', title: 'Classes', items: items)
+    items = (@Template.render('nav-item', name: item, url: item) for item in navItems).join('\n')
+    @Template.render('navigation', title: 'Classes', items: items)
 
   getNavFiles: (pathName) ->
     files = (path.basename(file, path.extname(file)) for file in @docFiles())
-    items = (Template.render('nav-item', name: file, url: file) for file in files).join('\n')
-    Template.render('navigation', title: 'Files', items: items)
+    items = (@Template.render('nav-item', name: file, url: file) for file in files).join('\n')
+    @Template.render('navigation', title: 'Files', items: items)
 
   getNavItems: (metadata) ->
     classes = @getNavClasses(metadata)
@@ -145,7 +148,7 @@ class Cli
     @navigation = "#{classes}\n#{files}"
 
   render: (content, filePath) ->
-    doc = Template.render 'layout',
+    doc = @Template.render 'layout',
                           content: content
                           title: @args.title
                           navigation: @navigation
@@ -153,9 +156,9 @@ class Cli
     fs.writeFileSync(filePath, doc)
 
   renderFile: (file) ->
-    @render(FilePage.render(file), @docsDirectory(path.basename(file, path.extname(file)), @args.extension))
+    @render(@FilePage.render(file), @docsDirectory(path.basename(file, path.extname(file)), @args.extension))
 
   renderClass: (klass) ->
-    @render(ClassPage.render(klass), @docsDirectory(klass.name, @args.extension))
+    @render(@ClassPage.render(klass), @docsDirectory(klass.name, @args.extension))
 
 module.exports = Cli

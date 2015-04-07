@@ -1,6 +1,7 @@
-TableOfContents = require '../src/table-of-contents'
-
 {getFixtureText} = require './spec-helper'
+
+Template = require '../src/template'
+TableOfContents = require('../src/table-of-contents') Template.fromTheme 'default'
 
 describe 'TableOfContents', ->
   it 'renders nothing when empty', ->
