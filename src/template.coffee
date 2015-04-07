@@ -88,7 +88,7 @@ class Template
     else if fs.existsSync template + '.jade'
       @renderer = jadeRenderer source '.jade'
     else
-      throw new Error 'Template not found'
+      throw new Error 'Template not found: ' + template
 
   # Public: Renders the page.
   #
