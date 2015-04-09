@@ -10,32 +10,44 @@ minifyCSS = require 'gulp-minify-css'
 gulp_runSequence = require 'run-sequence'
 bower = require 'main-bower-files'
 gulpFilter = require 'gulp-filter'
+flatten = require 'gulp-flatten'
 
 PATHS = {
   scripts:
-    src: 'scripts/*.coffee'
-    dest: 'statics/scripts/'
+    src: 'assets/scripts/*.coffee'
+    dest: '../../docs/'
   styles:
-    src: 'styles/*.less'
+    src: 'assets/styles/*.less'
+    dest: '../../docs/'
+  fonts:
     dest: '../../docs/'
 }
 
-gulp.task "bower_js", ->
+gulp.task 'vendor', ->
   jsFilter = gulpFilter("**/*.js")
+  cssFilter = gulpFilter(["**/*.scss","**/*.css"])
+  fontFilter = gulpFilter(["**/*.eot","**/*.svg","**/*.ttf","**/*.woff"])
+  otherFilter = gulpFilter(["**/*.swf", "!**/*.css", "!**/*.scss", "!**/*.js", "!**/*.eot","!**/*.svg","!**/*.ttf","!**/*.woff"])
+
   gulp.src bower()
-    .pipe(jsFilter)
+    .pipe flatten()
+    .pipe jsFilter
+ 
     .pipe gulp_concat 'vendor.js'
     .pipe minifyJs()
     .pipe gulp.dest PATHS.scripts.dest
+    .pipe jsFilter.restore()
 
-gulp.task "bower_css", ->
-  cssFilter = gulpFilter(["**/*.scss","**/*.css"])
-  gulp.src bower()
-    .pipe(cssFilter)
+    .pipe cssFilter
     .pipe gulp_sass().on 'error', gulp_util.log
     .pipe gulp_concat 'vendor.css'
     .pipe minifyCSS()
     .pipe gulp.dest PATHS.styles.dest
+    .pipe cssFilter.restore()
+
+    .pipe fontFilter
+    .pipe gulp.dest PATHS.fonts.dest
+    .pipe fontFilter.restore()
 
 gulp.task 'scripts', ->
   gulp.src PATHS.scripts.src
@@ -55,7 +67,7 @@ gulp.task 'watch', ->
   gulp.watch PATHS.scripts.src, ['scripts']
   gulp.watch PATHS.styles.src, ['styles']
 
-gulp.task 'build', ['bower_js', 'bower_css', 'scripts', 'styles']
+gulp.task 'build', ['vendor', 'scripts', 'styles']
 
 gulp.task 'default', (cb) ->
   gulp_runSequence 'build', 'watch', cb

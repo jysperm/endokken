@@ -2,9 +2,9 @@
   .panel-heading
     .panel-title
       span.signature!= signature
-      a(href= "##{id}")
+      a.document-link(href= "##{id}")
         span.octicon.octicon-link
-      a(href= srcUrl)
+      a.document-source(href= srcUrl)
         span.octicon.octicon-file-code
   .panel-body
     != description

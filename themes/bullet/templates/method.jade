@@ -2,9 +2,9 @@
   .panel-heading
     .panel-title
       span.signature!= signature
-      a(href="##{id}", data-toggle='tooltip', title='Permalink')
+      a.document-link(href="##{id}", data-toggle='tooltip', title='Permalink')
         span.octicon.octicon-link
-      a(href=srcUrl, data-toggle='tooltip', title='Source Code')
+      a.document-source(href=srcUrl, data-toggle='tooltip', title='Source Code')
         span.octicon.octicon-file-code
   .panel-body
     != description

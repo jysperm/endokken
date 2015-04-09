@@ -15,6 +15,9 @@ input[type="text"], .search-page-label, input[type="password"], input[type="emai
   outline: none;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
 }
+.markdown-body .octicon{
+  font: normal normal normal 16px/1 octicons;
+}
 .button, .minibutton {
   position: relative;
   display: inline-block;
@@ -75,6 +78,7 @@ input[type="text"], .search-page-label, input[type="password"], input[type="emai
 .panel-body{
   display: none;
 }
+
 .container {
   margin-top: 30px;
   min-height: 760px;
@@ -92,6 +96,32 @@ input[type="text"], .search-page-label, input[type="password"], input[type="emai
       width: 100%;
       margin: 0;
       display: table-cell;
+    }
+  }
+  h1{
+    span.label {
+      vertical-align: middle;
+      margin-top: -2px;
+      padding: 6px;
+      font-size: 12px;
+      display: inline-block;
+      border-radius: 2px;
+      color: #FFF;
+      font-weight: bold;
+      text-transform: uppercase;
+      background: #B4DABA;
+      margin-left: .5em;
+      a{
+        color: #fff;
+      }
+    }
+    .document-source{
+      display: inline-block;
+      vertical-align: middle;
+      margin-top: -1px;
+      font-size: 14px;
+      color: #B4DABA;
+      margin-left: 1em;
     }
   }
   .row {
@@ -122,6 +152,10 @@ input[type="text"], .search-page-label, input[type="password"], input[type="emai
           padding: 7px 15px;
           color: #40A977;
           text-decoration: none;
+          &.active{
+            color: #fff;
+            background: #58A966;
+          }
           &:hover {
             text-decoration: none;
             background-color: #EFEAE1;
@@ -139,6 +173,43 @@ input[type="text"], .search-page-label, input[type="password"], input[type="emai
           font-weight: 300;
           line-height: 1;
         }
+        .panel-primary table{
+          margin: 1em 0;
+          width: 100%;
+          border-spacing: 0;
+          border-collapse: collapse;
+          th {
+            padding: 8px 10px;
+            font-size: 14px;
+            color: #8E6965;
+            text-align: left;
+            background-color: #FAF8F5;
+          }
+          td {
+            padding: 8px 10px;
+            vertical-align: top;
+            border-top: solid 1px #EFEAE1;
+          }
+        } 
+        .panel-primary{
+          .panel-title{
+            font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 14px;
+            margin-bottom: 0.5em;
+            margin-top: 0;
+            font-weight: normal;
+            .signature{
+              cursor: pointer;
+            }
+            a{
+              margin-left: .5em;
+            }
+          }
+        }
+        .document-source{
+          display: inline;
+          color: #81C08B;
+        }
       }
     }
   }
@@ -148,4 +219,8 @@ input[type="text"], .search-page-label, input[type="password"], input[type="emai
   height: 50px;
   padding: 15px;
   margin-top: 20px;
+  .generated-by{
+    margin-left: 30%;
+    color: #999;
+  }
 }

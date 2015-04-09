@@ -1,5 +1,7 @@
 h1 Class: #{name}
-!= classInfoSection
+  span.label!= superClass
+  a.document-source(href=srcUrl)
+    span.octicon.octicon-file-code
 != descriptionSection
 != examplesSection
 != sections

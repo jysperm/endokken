@@ -31,8 +31,9 @@ html(lang='en')
   footer
     .footer.text-center
       .wrapper
-        | Generated on #{(new Date).toString()} by 
-        a(href='https://github.com/lee-dohm/endokken') Endokken v#{version}
+        .generated-by
+          | Generated on #{(new Date).toString()} by 
+          a(href='https://github.com/lee-dohm/endokken') Endokken v#{version}
 
-    script(src='app.js')
     script(src='vendor.js')
+    script(src='app.js')

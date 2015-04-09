@@ -2,6 +2,19 @@
   "name": "endokken-bullet",
   "dependencies": {
     "primer-css": "2.0.3",
-    "github-markdown-css": "~2.0.7"
+    "github-markdown-css": "~2.0.7",
+    "octicons": "~2.2.2",
+    "jquery": "~2.1.3"
+  },
+  "overrides": {
+    "octicons": {
+      "main": [
+        "octicons/octicons.css",
+        "octicons/octicons.eot",
+        "octicons/octicons.svg",
+        "octicons/octicons.ttf",
+        "octicons/octicons.woff"
+      ]
+    }
   }
 }
