@@ -14,13 +14,13 @@ flatten = require 'gulp-flatten'
 
 PATHS = {
   scripts:
-    src: 'assets/scripts/*.coffee'
-    dest: '../../docs/'
+    src: 'source/*.coffee'
+    dest: 'static/'
   styles:
-    src: 'assets/styles/*.less'
-    dest: '../../docs/'
+    src: 'source/*.less'
+    dest: 'static/'
   fonts:
-    dest: '../../docs/'
+    dest: 'static/'
 }
 
 gulp.task 'vendor', ->
@@ -32,7 +32,7 @@ gulp.task 'vendor', ->
   gulp.src bower()
     .pipe flatten()
     .pipe jsFilter
- 
+
     .pipe gulp_concat 'vendor.js'
     .pipe minifyJs()
     .pipe gulp.dest PATHS.scripts.dest
@@ -52,14 +52,14 @@ gulp.task 'vendor', ->
 gulp.task 'scripts', ->
   gulp.src PATHS.scripts.src
     .pipe gulp_coffee().on 'error', gulp_util.log
-    .pipe gulp_concat 'app.js'
+    .pipe gulp_concat 'bullet.js'
     .pipe minifyJs()
     .pipe gulp.dest PATHS.scripts.dest
 
 gulp.task 'styles', ->
   gulp.src PATHS.styles.src
     .pipe gulp_less().on 'error', gulp_util.log
-    .pipe gulp_concat 'app.css'
+    .pipe gulp_concat 'bullet.css'
     .pipe minifyCSS()
     .pipe gulp.dest PATHS.styles.dest
 
@@ -68,7 +68,3 @@ gulp.task 'watch', ->
   gulp.watch PATHS.styles.src, ['styles']
 
 gulp.task 'build', ['vendor', 'scripts', 'styles']
-
-gulp.task 'default', (cb) ->
-  gulp_runSequence 'build', 'watch', cb
-  

@@ -1,6 +1,9 @@
 {
   "name": "endokken-bullet",
   "version": "0.1.0",
+  "scripts": {
+    "prepublish": "gulp build"
+  },
   "devDependencies": {
     "gulp": "^3.8.10",
     "gulp-coffee": "^1.4.1",
