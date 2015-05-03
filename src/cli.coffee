@@ -47,6 +47,8 @@ class Cli
               describe: 'Title for index page'
     @args = @args.options 'theme',
               default: 'default'
+    @args = @args.options 'dest',
+              default: './docs'
     @args = @args.help('help').alias('help', '?')
     @args = @args.argv
 
@@ -62,7 +64,7 @@ class Cli
   # Returns a {String} containing the absolute path to the documentation directory with optional
   #   subpath.
   docsDirectory: (subpath, extension) ->
-    @docsDir ?= path.resolve('./docs')
+    @docsDir ?= path.resolve @args.dest
     if subpath
       subpath = subpath + @normalizeExtension(extension) if extension
       path.join(@docsDir, subpath)
@@ -113,7 +115,7 @@ class Cli
   buildDocsDirectory: ->
     fs.mkdirSync(@docsDirectory()) unless fs.existsSync(@docsDirectory())
 
-    staticPath = @sourceDirectory('themes/default/static')
+    staticPath = @sourceDirectory("themes/#{@args.theme}/static")
     for source in fs.readdirSync(staticPath)
       @copyFile(path.join(staticPath, source.toString()), @docsDirectory())
 
