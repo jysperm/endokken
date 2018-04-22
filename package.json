@@ -28,7 +28,7 @@
     "coffee-script": "^1.8.0",
     "donna": "^1.0.11",
     "haml-coffee": "~1.14.1",
-    "less": "^2.1.2",
+    "less": "^3.0.2",
     "markdown-it": "^4.2.1",
     "markdown-it-emoji": "^1.0.0",
     "highlight.js": "^8.5.0",
